@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+<head>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<meta charset="utf-8">
+<title>signup.html</title>
+</head>
+<body>
+<nav class="navbar navbar-default" role="navigation">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="#"> DreamTaker</a>
+			<button type="button" class="btn btn-default navbar-btn">Sign Out</button>
+			<p class="navbar-text">Signed in as Nobody</p>
+		</div>
+	</div>
+</nav>
+	
+<div class="panel panel-primary">
+	<div class="panel heading">
+		<h3 class="panel-title">User SignUp</h3>
+	</div>
+	</div>
+
+<form data-ng-submit="submit()" data-ng-controller="Ctrl">
+	<div class="form-group">
+		<label for="userName" class="col-xs-2 control-label">Username:</label>
+		<div class="col-sm-10">
+		<input maxlength="40" class="form-control" id="userName" placeholder="Username" data-ng-model="userName" required>
+		</div>
+		<label for="email" class="col-xs-2 control-label">Email:</label>
+		<div class="col-sm-10">
+		<input maxlength="40" class="form-control" id="email" placeholder="Email" data-ng-model="email" required>
+		</div>
+		<label for="password" class="col-xs-2 control-label">Password:</label>
+		<div class="col-sm-10">
+		<input maxlength="40" class="form-control" id="password" placeholder="Password" data-ng-model="password" required>
+		</div>
+		<label for="confirmPassword" class="col-xs-2 control-label">Confirm Password:</label>
+		<div class="col-sm-10">
+		<input maxlength="40" class="form-control" id="confirmPassword" placeholder="Confirm Password" data-ng-model="confirmPassword" required>
+		</div>
+	</div>
+	<p><input type="submit" id="submit" value="Submit" /></p>
+</form>
+	
+	
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular.min.js"></script>
+<script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<script>
+	function Ctrl($scope) {
+		$scope.submit= function() {
+			var query="http://localhost:8080/RESTService.svc/Create?";
+			query += "userName=" +$scope.userName;
+			query += "&email=" +$scope.email;
+			query += "&password=" +$scope.password;
+			query += "&confirmPassword=" +$scope.confirmPassword;
+			$.ajax({ url: query, crossDomain:true, dataType: 'json', type: 'GET' })
+			.done(function (json) {
+				$scope.response = json;
+				$scope.$apply();
+			})
+			.fail(function () {
+				alert("Error");
+			});
+		}
+	}
+</script>
+</body>
+</html>
