@@ -3,6 +3,41 @@
 <head>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script>
+function validate_username(obj) {
+var nameRegex = /^[a-zA-Z\-]+$/;
+if (obj.value == "") { obj.value = "Field is required";
+    obj.style.color="#9F0000"; }
+else if (obj.value.match(nameRegex) == null) {
+    obj.value = "Input is invalid"; obj.style.color="#9F0000"; }
+else { obj.style.color= "#000000"; }
+}
+function validate_email(obj) {
+var emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+if (obj.value == "") { obj.value = "Field is required";
+    obj.style.color="#9F0000"; }
+else if (obj.value.match(emailRegex) == null) {
+	obj.value = "Input is invalid"; obj.style.color="#9F0000"; }
+else { obj.style.color= "#000000"; }
+}
+function validate_password(obj) {
+var passwordRegex = /^[a-zA-Z\-]+$/;
+if (obj.value == "") { obj.value = "Field is required";
+    obj.style.color="#9F0000"; }
+else if (obj.value.match(passwordRegex) == null || obj.value.length < 8) {
+	obj.value = "Input is invalid"; obj.style.color="#9F0000";}
+else {obj.style.color= "#000000"}
+}
+function validate_confirm(obj) {
+const elem = document.getElementById("password");
+	if (obj.value == "") { 
+	obj.value = "Field is required";
+    obj.style.color="#9F0000"; }
+else if (obj.value != elem.value) {
+	obj.value = "Input is invalid"; obj.style.color="#9F0000";}
+else {obj.style.color= "#000000"}
+}
+</script>
 <meta charset="utf-8">
 <title>signup.html</title>
 </head>
@@ -27,22 +62,22 @@
 	<div class="form-group">
 		<label for="userName" class="col-xs-2 control-label">Username:</label>
 		<div class="col-sm-10">
-		<input maxlength="40" class="form-control" id="userName" placeholder="Username" data-ng-model="userName" required>
+		<input maxlength="40" class="form-control" id="userName" placeholder="Username" onfocusout="validate_username(this)" data-ng-model="userName" required>
 		</div>
 		<label for="email" class="col-xs-2 control-label">Email:</label>
 		<div class="col-sm-10">
-		<input maxlength="40" class="form-control" id="email" placeholder="Email" data-ng-model="email" required>
+		<input maxlength="40" class="form-control" id="email" placeholder="Email" onfocusout="validate_email(this)" data-ng-model="email" required>
 		</div>
 		<label for="password" class="col-xs-2 control-label">Password:</label>
 		<div class="col-sm-10">
-		<input maxlength="40" class="form-control" id="password" placeholder="Password" data-ng-model="password" required>
+		<input maxlength="40" class="form-control" id="password" placeholder="Password" onfocusout="validate_password(this)" data-ng-model="password" required>
 		</div>
 		<label for="confirmPassword" class="col-xs-2 control-label">Confirm Password:</label>
 		<div class="col-sm-10">
-		<input maxlength="40" class="form-control" id="confirmPassword" placeholder="Confirm Password" data-ng-model="confirmPassword" required>
+		<input maxlength="40" class="form-control" id="confirmPassword" placeholder="Confirm Password" onfocusout="validate_confirm(this)" data-ng-model="confirmPassword" required>
 		</div>
-	</div>
 	<p><input type="submit" id="submit" value="Submit" /></p>
+	</div>
 </form>
 	
 	
@@ -52,15 +87,17 @@
 <script>
 	function Ctrl($scope) {
 		$scope.submit= function() {
-			var query="http://localhost:8080/RESTService.svc/Create?";
-			query += "userName=" +$scope.userName;
-			query += "&email=" +$scope.email;
-			query += "&password=" +$scope.password;
-			query += "&confirmPassword=" +$scope.confirmPassword;
-			$.ajax({ url: query, crossDomain:true, dataType: 'json', type: 'GET' })
-			.done(function (json) {
-				$scope.response = json;
-				$scope.$apply();
+			//var query="http://localhost:8080/RESTService.svc/Create?";
+			var submitForm={userName:$scope.userName, email:$scope.email, password:$scope.password, confirmPassword:$scope.confirmPassword};
+			var formValue=JSON.stringify(submitForm);
+			//query += "userName=" +$scope.userName;
+			//query += "&email=" +$scope.email;
+			//query += "&password=" +$scope.password;
+			//query += "&confirmPassword=" +$scope.confirmPassword;
+			//$.ajax({ url: query, crossDomain:true, dataType: 'json', type: 'GET' })
+			//.done(function (json) {
+				//$scope.response = json;
+				//$scope.$apply();
 			})
 			.fail(function () {
 				alert("Error");
